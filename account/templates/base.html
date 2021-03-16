@@ -1,0 +1,81 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>{% block title %}{% endblock %}</title>
+    {% comment %} <link href="{% static " css/base.css" %}" rel="stylesheet"> {% endcomment %}
+</head>
+<style>
+    #header{
+        /* display: flex; */
+        height: 30px;
+        background-color: aqua;
+    }
+    .logo{
+        width:1000px;
+        height:20px;
+        background-color: aqua;
+    }
+    .menu{
+        position:absolute;
+        display: flex;
+        text-align: center;
+        justify-content: center;
+        color: black;
+        top:-6px;
+        {% comment %} margin-top:-243px; {% endcomment %}
+        margin-left:604px;
+        
+    }
+    .user{
+        position:relative;
+        left:1114px;
+        top:-127px;
+    }
+</style>
+<body>
+    <div id="header">
+        <span class="logo">Bookmarks</span>
+        <div id="content">
+        {% if messages %}
+            <ul class="messages">
+                {% for messages in messages %}
+                    <li class="{{ message.tags }}">
+                        {{ message|safe}}
+                        <a href='#' class='close'>X</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+        {% block content %}
+        {% endblock  %}
+
+        {% if request.user.is_authenticated %}
+            <ul class="menu">
+                <li {% if section == "dashboard" %}class="selected"{% endif %}>
+                    <a href="{% url "dashboard" %}">My dashboard</a>
+                </li>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <li {% if section == "images" %}class="selected"{% endif %}>
+                    <a href="#">Images</a>
+                </li>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <li {% if section == "People" %}class="selected"{% endif %}>
+                    <a href="#">People</a>
+                </li>
+            </ul>
+        {% endif %}
+        <span class="user">
+            {% if request.user.is_authenticated %}
+                Hello {{request.user.first_name}},
+                <a href="{% url "logout" %}">Logout</a>
+            {% else %}
+                {% comment %} <a href="{% url "login" %}">Log-in</a>  {% endcomment %}
+
+            {% endif %}
+        </span>
+
+
+    </div>
